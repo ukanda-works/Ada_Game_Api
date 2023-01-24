@@ -10,13 +10,12 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "partida")
+@Table(name = "stadistics")
 public class Stadistics {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,11 +23,16 @@ public class Stadistics {
     @JdbcTypeCode(SqlTypes.INTEGER)
     private Long id;
 
-    @Column(name = "ganada", nullable = false)
-    @JdbcTypeCode(SqlTypes.TINYINT)
-    private Boolean ganada;
+    @Column(name = "game_hours")
+    @JdbcTypeCode(SqlTypes.INTEGER)
+    private String gameHours;
 
-    @Column(name = "comienzo_partida", nullable = false)
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
-    private LocalDateTime comienzo_partida;
+    @Column(name = "victories")
+    @JdbcTypeCode(SqlTypes.INTEGER)
+    private String victories;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }
