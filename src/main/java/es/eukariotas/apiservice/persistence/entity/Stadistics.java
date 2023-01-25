@@ -35,4 +35,5 @@ public class Stadistics {
     @JoinColumn(name = "user_id")
     private User user;
 
+    //TODO añadir los metodos para el calculo de las estadisticas
 }

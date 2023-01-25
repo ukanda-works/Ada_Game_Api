@@ -25,7 +25,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-public void deleteUser(User user) {
+    public void deleteUser(User user) {
         userRepository.delete(user);
     }
 
@@ -37,5 +37,39 @@ public void deleteUser(User user) {
         return userRepository.findById(id).orElse(null);
     }
 
+    /**
+     * Creates a new user if the username is not taken
+     * @param user the user to be created
+     */
+    public void createUser(User user) {
+        if (user.getUserEmail() != null && user.getUserPass() != null && user.getUserName() != null) {
+            if (existsByUsername(user)) {
+                throw new IllegalStateException("Username already taken");
+            } else {
+                saveUser(user);
+            }
+        }
+    }
 
+    /**
+     * Updates the user email using the username and password
+     * @param userName the username of the user
+     * @param pass the password of the user
+     * @param email the new email of the user
+     */
+    public void updateUserEmail(String userName,String pass, String email) {
+        User user = userRepository.findByUserName(userName).orElse(null);
+        if (user == null) {
+            throw new IllegalStateException("User not found");
+        }else {
+            if (!user.getUserPass().equals(pass)) {
+                throw new IllegalStateException("Password incorrect");
+            }else{
+                user.setUserEmail(email);
+                saveUser(user);
+            }
+        }
+
+
+    }
 }

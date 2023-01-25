@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/stadistics")
-public class StadisticsController {
+public class StadisticsController{
     private final StadisticsService stadisticsService;
 
     public StadisticsController(StadisticsService stadisticsService) {

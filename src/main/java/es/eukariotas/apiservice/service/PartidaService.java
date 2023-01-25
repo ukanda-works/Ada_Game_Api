@@ -2,15 +2,17 @@ package es.eukariotas.apiservice.service;
 
 import es.eukariotas.apiservice.persistence.entity.Partida;
 import es.eukariotas.apiservice.persistence.repository.PartidaRepository;
+import es.eukariotas.apiservice.persistence.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class PartidaService {
+public class PartidaService extends GenericService{
     private final PartidaRepository partidaRepository;
 
     public PartidaService(PartidaRepository partidaRepository) {
+
         this.partidaRepository = partidaRepository;
     }
 
