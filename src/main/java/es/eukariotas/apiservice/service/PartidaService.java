@@ -8,9 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
-public class PartidaService{
+public class PartidaService extends GenericService{
     @Autowired
     private GenericRepository genericRepository;
     private final PartidaRepository partidaRepository;
@@ -37,6 +38,8 @@ public class PartidaService{
     }
 
     public void verifyHeader(HttpServletRequest request){
+        Map<String,String> headers = headers(request);
+
         if (genericRepository.verifyUser("nombre")){
             System.out.println("Usuario correcto");
         }else {
