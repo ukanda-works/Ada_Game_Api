@@ -37,4 +37,5 @@ public class Turno {
     @JoinColumn(name = "partida_id")
     private Partida partida;
 
+    //TODO metodos para el calculo de la puntuacion
 }

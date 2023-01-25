@@ -1,16 +1,23 @@
 package es.eukariotas.apiservice.service;
 
 import es.eukariotas.apiservice.persistence.entity.Partida;
+import es.eukariotas.apiservice.persistence.repository.GenericRepository;
 import es.eukariotas.apiservice.persistence.repository.PartidaRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
-public class PartidaService {
+public class PartidaService extends GenericService{
+    @Autowired
+    private GenericRepository genericRepository;
     private final PartidaRepository partidaRepository;
 
-    public PartidaService(PartidaRepository partidaRepository) {
+    public PartidaService( PartidaRepository partidaRepository){
+
         this.partidaRepository = partidaRepository;
     }
 
@@ -28,5 +35,15 @@ public class PartidaService {
 
     public List<Partida> getAllPartidas() {
         return partidaRepository.findAll();
+    }
+
+    public void verifyHeader(HttpServletRequest request){
+        Map<String,String> headers = headers(request);
+
+        if (genericRepository.verifyUser("nombre")){
+            System.out.println("Usuario correcto");
+        }else {
+            System.out.println("Usuario incorrecto");
+        }
     }
 }
