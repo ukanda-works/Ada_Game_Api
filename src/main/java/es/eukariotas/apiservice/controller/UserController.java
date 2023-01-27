@@ -28,6 +28,12 @@ public class UserController{
         return userService.getAllUsers();
     }
 
+    /**
+     * login de usuario
+     * @param user nombre de usuario
+     * @param pass contraseña
+     * @return respuesta con el estado de la operacion
+     */
     @GetMapping("/login")
     public ResponseEntity<String> login(@RequestParam String user, @RequestParam String pass){
         String body ="";
