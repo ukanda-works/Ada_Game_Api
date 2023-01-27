@@ -1,5 +1,6 @@
 package es.eukariotas.apiservice.service;
 
+import es.eukariotas.apiservice.exceptions.CustomExceptions;
 import es.eukariotas.apiservice.persistence.entity.User;
 import es.eukariotas.apiservice.persistence.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -69,7 +70,15 @@ public class UserService {
                 saveUser(user);
             }
         }
-
-
+    }
+    public void login(String userName, String pass) throws CustomExceptions {
+        User user = userRepository.findByUserName(userName).orElse(null);
+        if (user == null) {
+            throw new CustomExceptions("User not found");
+        }else {
+            if (!user.getUserPass().equals(pass)) {
+                throw new IllegalStateException("Password incorrect");
+            }
+        }
     }
 }

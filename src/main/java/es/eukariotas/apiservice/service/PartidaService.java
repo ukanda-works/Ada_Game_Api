@@ -1,5 +1,6 @@
 package es.eukariotas.apiservice.service;
 
+import es.eukariotas.apiservice.exceptions.CustomExceptions;
 import es.eukariotas.apiservice.persistence.entity.Partida;
 import es.eukariotas.apiservice.persistence.repository.GenericRepository;
 import es.eukariotas.apiservice.persistence.repository.PartidaRepository;
@@ -37,13 +38,10 @@ public class PartidaService extends GenericService{
         return partidaRepository.findAll();
     }
 
-    public void verifyHeader(HttpServletRequest request){
+    public void verifyHeader(HttpServletRequest request) throws CustomExceptions {
         Map<String,String> headers = headers(request);
-
-        if (genericRepository.verifyUser("nombre")){
-            System.out.println("Usuario correcto");
-        }else {
-            System.out.println("Usuario incorrecto");
+        if (!genericRepository.verifyToken(headers.get("user"),headers.get("token"))){
+            throw new CustomExceptions("token invalido");
         }
     }
 }
