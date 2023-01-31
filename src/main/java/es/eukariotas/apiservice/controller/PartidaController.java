@@ -1,6 +1,6 @@
 package es.eukariotas.apiservice.controller;
 
-import es.eukariotas.apiservice.persistence.entity.Partida;
+import es.eukariotas.apiservice.persistence.entity.Party;
 import es.eukariotas.apiservice.service.PartidaService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class PartidaController{
     }
 
     @GetMapping
-    public List<Partida> getPartidas() {
+    public List<Party> getPartidas() {
         return partidaService.getAllPartidas();
     }
 

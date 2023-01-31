@@ -11,29 +11,33 @@ import org.hibernate.type.SqlTypes;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "partida")
-public class Partida {
+@Table(name = "party")
+public class Party {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     @JdbcTypeCode(SqlTypes.INTEGER)
     private Long id;
 
-    @Column(name = "ganada", nullable = false)
-    @JdbcTypeCode(SqlTypes.TINYINT)
-    private Boolean ganada;
+    @Column(name = "winner", nullable = false)
+    @JdbcTypeCode(SqlTypes.INTEGER)
+    private Long ganador;
 
-    @Column(name = "comienzo_partida", nullable = false)
+    @Column(name = "date", nullable = false)
     @JdbcTypeCode(SqlTypes.TIMESTAMP)
     private LocalDateTime comienzo_partida;
 
-    @ManyToMany(mappedBy = "partidas")
+    @ManyToMany(mappedBy = "parties")
     private Collection<User> users = new ArrayList<>();
+
+    @OneToMany(mappedBy = "party", orphanRemoval = true)
+    private List<Turn> turns = new ArrayList<>();
 
 }

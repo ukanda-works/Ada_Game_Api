@@ -1,6 +1,6 @@
 package es.eukariotas.apiservice.controller;
 
-import es.eukariotas.apiservice.persistence.entity.Turno;
+import es.eukariotas.apiservice.persistence.entity.Turn;
 import es.eukariotas.apiservice.service.TurnoService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +19,7 @@ public class TurnoController{
     }
 
     @GetMapping
-    public List<Turno> getTurnos() {
+    public List<Turn> getTurnos() {
         return turnoService.getAllTurnos();
     }
 }

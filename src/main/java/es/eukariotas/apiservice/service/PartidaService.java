@@ -1,7 +1,7 @@
 package es.eukariotas.apiservice.service;
 
 import es.eukariotas.apiservice.exceptions.CustomExceptions;
-import es.eukariotas.apiservice.persistence.entity.Partida;
+import es.eukariotas.apiservice.persistence.entity.Party;
 import es.eukariotas.apiservice.persistence.repository.GenericRepository;
 import es.eukariotas.apiservice.persistence.repository.PartidaRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,19 +22,19 @@ public class PartidaService extends GenericService{
         this.partidaRepository = partidaRepository;
     }
 
-    public void savePartida(Partida partida) {
-        partidaRepository.save(partida);
+    public void savePartida(Party party) {
+        partidaRepository.save(party);
     }
 
-    public void deletePartida(Partida partida) {
-        partidaRepository.delete(partida);
+    public void deletePartida(Party party) {
+        partidaRepository.delete(party);
     }
 
-    public Partida getPartidaById(Long id) {
+    public Party getPartidaById(Long id) {
         return partidaRepository.findById(id).orElse(null);
     }
 
-    public List<Partida> getAllPartidas() {
+    public List<Party> getAllPartidas() {
         return partidaRepository.findAll();
     }
 

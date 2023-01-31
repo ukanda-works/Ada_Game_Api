@@ -1,5 +1,6 @@
 package es.eukariotas.apiservice.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,8 +9,10 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,34 +27,49 @@ public class User {
     @JdbcTypeCode(SqlTypes.BIGINT)
     private Long id;
 
-    @Column(name = "user_name",nullable = false, unique = true, length = 45)
+    @Column(name = "user",nullable = false, unique = true, length = 45)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String userName;
 
-    @Column(name = "user_email", nullable = false, unique = true, length = 45)
+    @Column(name = "email", nullable = false, unique = true, length = 45)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String userEmail;
 
-    @Column(name = "user_pass",nullable = false, unique = true, length = 45)
+    @Column(name = "password",nullable = false, unique = true, length = 45)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String userPass;
 
-    @Column(name = "user_profile_img", length = 45)
+    @Column(name = "image", length = 100)
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    private String user_profile_img;
+    private String userImage;
 
-    @Column(name = "user_description", length = 45)
+    @Column(name = "description", length = 240)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String userDescription;
 
-    @Column(name = "user_country", length = 45)
+    @Column(name = "country", length = 45)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String userCountry;
 
+
     @ManyToMany
-    @JoinTable(name = "user_partidas",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "partidas_id"))
-    private Collection<Partida> partidas = new ArrayList<>();
+    @JoinTable(name = "user_has_party",
+            joinColumns = @JoinColumn(name = "party_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Collection<Party> parties = new ArrayList<>();
+
+    @Column(name = "last_login")
+    @JdbcTypeCode(SqlTypes.TIMESTAMP)
+    private LocalDateTime lastLogin;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "user")
+    private Token token;
+
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<Turn> turns = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", orphanRemoval = true)
+    private Stadistics stadistics;
 
 }

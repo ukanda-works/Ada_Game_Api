@@ -13,29 +13,32 @@ import org.hibernate.type.SqlTypes;
 @Getter
 @Setter
 @Entity
-@Table(name = "turno")
-public class Turno {
+@Table(name = "turn")
+public class Turn {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     @JdbcTypeCode(SqlTypes.INTEGER)
     private Long id;
 
-    @Column(name = "informacion", nullable = false)
+    @Column(name = "player", nullable = false)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String informacion;
 
-    @Column(name = "jugador", nullable = false)
+    @Column(name = "next")
+    @JdbcTypeCode(SqlTypes.INTEGER)
+    private Integer next;
+
+    @Column(name = "end")
     @JdbcTypeCode(SqlTypes.TINYINT)
-    private Boolean jugador;
+    private Boolean end;
 
-    @Column(name = "final_turno", length = 1, nullable = false)
-    @JdbcTypeCode(SqlTypes.TINYINT)
-    private String final_turno;
+    @ManyToOne
+    @JoinColumn(name = "party_id")
+    private Party party;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "partida_id")
-    private Partida partida;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    //TODO metodos para el calculo de la puntuacion
 }

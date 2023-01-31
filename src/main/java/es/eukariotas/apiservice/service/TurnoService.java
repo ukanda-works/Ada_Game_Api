@@ -1,6 +1,6 @@
 package es.eukariotas.apiservice.service;
 
-import es.eukariotas.apiservice.persistence.entity.Turno;
+import es.eukariotas.apiservice.persistence.entity.Turn;
 import es.eukariotas.apiservice.persistence.repository.TurnoRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,19 +14,19 @@ public class TurnoService {
         this.turnoRepository = turnoRepository;
     }
 
-    public void saveTurno(Turno turno) {
-        turnoRepository.save(turno);
+    public void saveTurno(Turn turn) {
+        turnoRepository.save(turn);
     }
 
-    public void deleteTurno(Turno turno) {
-        turnoRepository.delete(turno);
+    public void deleteTurno(Turn turn) {
+        turnoRepository.delete(turn);
     }
 
-    public Turno getTurnoById(Long id) {
+    public Turn getTurnoById(Long id) {
         return turnoRepository.findById(id).orElse(null);
     }
 
-    public List<Turno> getAllTurnos() {
+    public List<Turn> getAllTurnos() {
         return turnoRepository.findAll();
     }
 }
