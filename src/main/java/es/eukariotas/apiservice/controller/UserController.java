@@ -1,5 +1,7 @@
 package es.eukariotas.apiservice.controller;
 
+import es.eukariotas.apiservice.exceptions.CustomExceptions;
+import es.eukariotas.apiservice.persistence.entity.Token;
 import es.eukariotas.apiservice.persistence.entity.User;
 import es.eukariotas.apiservice.service.UserService;
 import org.springframework.http.HttpHeaders;
@@ -28,26 +30,18 @@ public class UserController{
         return userService.getAllUsers();
     }
 
-    /**
-     * login de usuario
-     * @param user nombre de usuario
-     * @param pass contraseña
-     * @return respuesta con el estado de la operacion
-     */
-    @GetMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String user, @RequestParam String pass){
-        String body ="";
-        HttpStatus status = HttpStatus.UNAUTHORIZED;
-        HttpHeaders headers = new HttpHeaders();
+
+    @GetMapping("/login/{userName}/{password}")
+    public ResponseEntity<String> login(@RequestParam(value = "userName") String user, @RequestParam("password") String password){
         try {
-            userService.login(user,pass);
-            status = HttpStatus.OK;
-            body = "login correcto";
-            //TODO añadir un token
-        }catch (Exception e){
-            //lanzar respuesta con error
-            body = "error al iniciar sesion -"+e.getMessage();
+          Token token = userService.login(user, password);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("token", token.getToken());
+            return new ResponseEntity<>("", responseHeaders, HttpStatus.OK);
+
+        } catch (CustomExceptions e) {
+            throw new RuntimeException(e);
         }
-        return new ResponseEntity<>(body, headers, status);
+
     }
 }

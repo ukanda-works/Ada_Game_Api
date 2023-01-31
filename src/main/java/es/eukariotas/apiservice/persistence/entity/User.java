@@ -37,7 +37,7 @@ public class User {
 
     @Column(name = "password",nullable = false, unique = true, length = 45)
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    private String userPass;
+    private String password;
 
     @Column(name = "image", length = 100)
     @JdbcTypeCode(SqlTypes.VARCHAR)

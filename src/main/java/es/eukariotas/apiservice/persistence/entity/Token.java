@@ -9,6 +9,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,5 +34,22 @@ public class Token {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private User user;
+
+    /**
+     * Create a new token for the user
+     * @param user user to associate the token
+     * @return created token
+     */
+    public static Token createToken(User user) {
+        Token token = new Token();
+        token.setToken(UUID.randomUUID().toString());
+        token.setCaducity(LocalDateTime.now().plusDays(7));
+        token.setUser(user);
+        return token;
+    }
+
+    public Boolean isExpired() {
+        return caducity.isBefore(LocalDateTime.now());
+    }
 
 }
