@@ -21,13 +21,9 @@ public class Turn {
     @JdbcTypeCode(SqlTypes.INTEGER)
     private Long id;
 
-    @Column(name = "player", nullable = false)
+    @Column(name = "info", nullable = false)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String informacion;
-
-    @Column(name = "next")
-    @JdbcTypeCode(SqlTypes.INTEGER)
-    private Integer next;
 
     @Column(name = "end")
     @JdbcTypeCode(SqlTypes.TINYINT)
@@ -41,4 +37,7 @@ public class Turn {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToOne
+    @JoinColumn(name = "next_turn_id")
+    private Turn next_turn;
 }
