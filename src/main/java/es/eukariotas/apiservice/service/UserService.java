@@ -101,7 +101,13 @@ public class UserService {
         }
     }
 
-
+    /**
+     * Verifies the token of the user
+     * @param userName the username of the user
+     * @param token the token of the user
+     * @return true if the token is correct
+     * @throws CustomExceptions
+     */
     public Boolean verifyTokenByUser(String userName, String token) throws CustomExceptions {
         User user = userRepository.findByUserName(userName).orElse(null);
         if (user == null) {
@@ -120,6 +126,58 @@ public class UserService {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Logs out the user
+     * Delete the token of the user in the database
+     * @param userName the username of the user
+     * @param token the token of the user
+     * @throws CustomExceptions
+     */
+    public void logout(String userName, String token) throws CustomExceptions {
+        User user = userRepository.findByUserName(userName).orElse(null);
+        if (user == null) {
+            throw new CustomExceptions("User not found");
+        }else {
+            if (user.getToken() == null) {
+                throw new CustomExceptions("User not logged in");
+            }else {
+                if (!user.getToken().getToken().equals(token)) {
+                    throw new CustomExceptions("Token incorrect");
+                }else {
+                    if (user.getToken().isExpired()) {
+                        throw new CustomExceptions("Token expired");
+                    }else {
+                        tokenRepository.deleteTokenByToken(user.getToken().getToken());
+                        user.setToken(null);
+                        userRepository.save(user);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Registers a new user if the username or email is not taken
+     * @param user the user to be created
+     * @throws CustomExceptions for some incidents
+     */
+    public Token registerUser(User user) throws CustomExceptions {
+        if (user.getUserEmail() != null && user.getPassword() != null && user.getUserName() != null) {
+            if (existsByUsername(user)|| userRepository.existsByUserEmail(user.getUserEmail())){
+                throw new CustomExceptions("Username or email already taken");
+            } else {
+                Token token = Token.createToken(user);
+                user.setToken(token);
+                user.setLastLogin(LocalDateTime.now());
+                tokenRepository.save(token);
+                userRepository.save(user);
+                return token;
+            }
+        }else {
+            throw new CustomExceptions("User not valid");
         }
     }
 }
