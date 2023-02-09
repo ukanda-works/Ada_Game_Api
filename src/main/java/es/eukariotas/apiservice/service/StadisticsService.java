@@ -26,4 +26,5 @@ public class StadisticsService {
         return stadisticsRepository.findAll();
     }
 
+
 }

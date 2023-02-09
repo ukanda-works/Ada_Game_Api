@@ -37,7 +37,7 @@ public class UserController{
      * @return 200 si se ha logueado correctamente, 400 si no se ha podido loguear
      */
     @GetMapping("/login/{userName}/{password}")
-    public ResponseEntity<String> login(@RequestParam(value = "userName") String user, @RequestParam("password") String password){
+    public ResponseEntity<String> login(@PathVariable(value = "userName") String user, @PathVariable("password") String password){
         try {
           Token token = userService.login(user, password);
             HttpHeaders responseHeaders = new HttpHeaders();
@@ -47,6 +47,16 @@ public class UserController{
         } catch (CustomExceptions e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @GetMapping("/verify/{userName}/{password}")
+    public ResponseEntity<String> verify(@PathVariable(value = "userName") String user, @PathVariable("password") String password){
+        System.out.printf("cocaina");
+            if (userService.verifyUser(user, password)) {
+                return new ResponseEntity<>("cocaina", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
+            }
     }
 
     /**

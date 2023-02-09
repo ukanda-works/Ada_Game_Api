@@ -26,7 +26,9 @@ public class UserService {
        }
          return true;
     }
-
+    public Boolean verifyUser(String userName, String password) {
+        return userRepository.existsByUserNameAndPassword(userName, password);
+    }
     public void saveUser(User user) {
         userRepository.save(user);
     }
