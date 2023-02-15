@@ -86,7 +86,7 @@ public class UserService {
      * @return new token for the user
      * @throws CustomExceptions for some incidents
      */
-    public Token login(String userName, String pass) throws CustomExceptions {
+    public User login(String userName, String pass) throws CustomExceptions {
         User user = userRepository.findByUserNameAndPassword(userName, pass).orElse(null);
         if (user == null) {
             throw new CustomExceptions("User not found");
@@ -99,7 +99,7 @@ public class UserService {
             user.setLastLogin(LocalDateTime.now());
            tokenRepository.save(token);
            userRepository.save(user);
-            return token;
+            return user;
         }
     }
 

@@ -38,7 +38,6 @@ public class PartidaController{
         HttpStatus status = HttpStatus.BAD_REQUEST;
         HttpHeaders headers = new HttpHeaders();
         try {
-            partidaService.verifyHeader(request);
             body = "partida iniciada";
             status = HttpStatus.OK;
         } catch (Exception e) {

@@ -13,63 +13,59 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "user")
+@Table(name = "usuario")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    @JdbcTypeCode(SqlTypes.BIGINT)
     private Long id;
 
-    @Column(name = "user",nullable = false, unique = true, length = 45)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(name = "puntucacion", nullable = false)
+    private int puntucacion;
+
+    @Column(name = "userName",nullable = false, unique = true, length = 45)
     private String userName;
 
     @Column(name = "email", nullable = false, unique = true, length = 45)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
     private String userEmail;
 
     @Column(name = "password",nullable = false, unique = true, length = 45)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
     private String password;
 
-    @Column(name = "image", length = 100)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    private String userImage;
-
     @Column(name = "description", length = 240)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
     private String userDescription;
 
     @Column(name = "country", length = 45)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
     private String userCountry;
 
 
-    @ManyToMany
-    @JoinTable(name = "user_has_party",
-            joinColumns = @JoinColumn(name = "party_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Collection<Party> parties = new ArrayList<>();
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<Party> parties = new ArrayList<>();
 
     @Column(name = "last_login")
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
     private LocalDateTime lastLogin;
 
     @JsonIgnore
     @OneToOne(mappedBy = "user")
     private Token token;
 
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private List<Turn> turns = new ArrayList<>();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(userName, user.userName) && Objects.equals(userEmail, user.userEmail) && Objects.equals(password, user.password);
+    }
 
-    @OneToOne(mappedBy = "user", orphanRemoval = true)
-    private Stadistics stadistics;
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userName, userEmail, password);
+    }
 }

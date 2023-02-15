@@ -10,5 +10,10 @@ public interface PartidaRepository extends JpaRepository<Party, Long> {
     List<Party> findAll();
     Optional<Party> findById(Long aLong);
 
+    List<Party> findByUser_Id(Long id);
+
+    List<Party> findByUser_IdAndResultado(Long id, String resultado);
+
+    void deleteById(Long id);
 
 }

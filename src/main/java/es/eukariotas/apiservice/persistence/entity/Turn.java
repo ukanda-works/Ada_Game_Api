@@ -18,26 +18,23 @@ public class Turn {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    @JdbcTypeCode(SqlTypes.INTEGER)
     private Long id;
-
-    @Column(name = "info", nullable = false)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    private String informacion;
-
-    @Column(name = "end")
-    @JdbcTypeCode(SqlTypes.TINYINT)
-    private Boolean end;
 
     @ManyToOne
     @JoinColumn(name = "party_id")
     private Party party;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "numTurno", nullable = false)
+    private int numTurno;
 
-    @OneToOne
-    @JoinColumn(name = "next_turn_id")
-    private Turn next_turn;
+    @Column(name = "jugador", nullable = false)
+    private String jugador;
+
+    @Column(name = "movimiento", nullable = false)
+    private String movimiento;
+
+    @Column(name = "last")
+    private boolean last;
+
+
 }

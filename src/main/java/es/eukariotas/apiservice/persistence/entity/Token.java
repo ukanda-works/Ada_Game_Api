@@ -24,11 +24,9 @@ public class Token {
     private Long id;
 
     @Column(name = "token", unique = true, length = 200)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
     private String token;
 
     @Column(name = "caducity")
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
     private LocalDateTime caducity;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

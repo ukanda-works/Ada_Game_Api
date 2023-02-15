@@ -9,4 +9,9 @@ import java.util.Optional;
 public interface TurnoRepository extends JpaRepository<Turn, Long> {
     List<Turn> findAll();
     Optional<Turn> findById(Long aLong);
+    List<Turn> findByParty_Id(Long id);
+    void deleteById(Long id);
+
+    List<Turn> findByParty_IdAndNumTurno(Long id, int numTurno);
+
 }

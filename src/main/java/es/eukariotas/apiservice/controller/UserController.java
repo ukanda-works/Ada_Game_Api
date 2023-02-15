@@ -37,13 +37,9 @@ public class UserController{
      * @return 200 si se ha logueado correctamente, 400 si no se ha podido loguear
      */
     @GetMapping("/login/{userName}/{password}")
-    public ResponseEntity<String> login(@PathVariable(value = "userName") String user, @PathVariable("password") String password){
+    public User login(@PathVariable(value = "userName") String user, @PathVariable("password") String password){
         try {
-          Token token = userService.login(user, password);
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("token", token.getToken());
-            return new ResponseEntity<>("", responseHeaders, HttpStatus.OK);
-
+          return userService.login(user, password);
         } catch (CustomExceptions e) {
             throw new RuntimeException(e);
         }

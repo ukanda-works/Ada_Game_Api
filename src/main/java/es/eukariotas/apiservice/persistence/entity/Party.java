@@ -23,19 +23,20 @@ public class Party {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    @JdbcTypeCode(SqlTypes.INTEGER)
     private Long id;
 
-    @Column(name = "winner", nullable = false)
-    @JdbcTypeCode(SqlTypes.INTEGER)
-    private Long ganador;
+    @Column(name = "resultado", nullable = false)
+    private String resultado;
+
+    @Column(name = "jugador_color", nullable = false)
+    private String jugador_color;
 
     @Column(name = "date", nullable = false)
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
     private LocalDateTime comienzo_partida;
 
-    @ManyToMany(mappedBy = "parties")
-    private Collection<User> users = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "party", orphanRemoval = true)
     private List<Turn> turns = new ArrayList<>();
