@@ -1,5 +1,6 @@
 package es.eukariotas.apiservice.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,15 +17,16 @@ import org.hibernate.type.SqlTypes;
 @Table(name = "turn")
 public class Turn {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "party_id")
     private Party party;
 
-    @Column(name = "numTurno", nullable = false)
+    @Column(name = "NUMTURNO", nullable = false)
     private int numTurno;
 
     @Column(name = "jugador", nullable = false)
@@ -32,9 +34,6 @@ public class Turn {
 
     @Column(name = "movimiento", nullable = false)
     private String movimiento;
-
-    @Column(name = "last")
-    private boolean last;
 
 
 }

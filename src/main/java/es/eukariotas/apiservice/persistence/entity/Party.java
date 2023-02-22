@@ -1,5 +1,6 @@
 package es.eukariotas.apiservice.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +22,7 @@ import java.util.List;
 @Table(name = "party")
 public class Party {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -34,11 +35,16 @@ public class Party {
     @Column(name = "date", nullable = false)
     private LocalDateTime comienzo_partida;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "party", orphanRemoval = true)
+    @OneToMany(mappedBy = "party")
     private List<Turn> turns = new ArrayList<>();
 
+    public void addTurn(Turn turn) {
+        turns.add(turn);
+        turn.setParty(this);
+    }
 }

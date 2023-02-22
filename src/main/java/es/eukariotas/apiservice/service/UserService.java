@@ -5,6 +5,8 @@ import es.eukariotas.apiservice.persistence.entity.Token;
 import es.eukariotas.apiservice.persistence.entity.User;
 import es.eukariotas.apiservice.persistence.repository.TokenRepository;
 import es.eukariotas.apiservice.persistence.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -39,6 +41,9 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+    public Page<User> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     public User getUserById(Long id) {
@@ -167,19 +172,35 @@ public class UserService {
      * @throws CustomExceptions for some incidents
      */
     public Token registerUser(User user) throws CustomExceptions {
+        System.out.println(user.getUserEmail() + " " + user.getPassword() + " " + user.getUserName());
         if (user.getUserEmail() != null && user.getPassword() != null && user.getUserName() != null) {
             if (existsByUsername(user)|| userRepository.existsByUserEmail(user.getUserEmail())){
                 throw new CustomExceptions("Username or email already taken");
             } else {
-                Token token = Token.createToken(user);
-                user.setToken(token);
                 user.setLastLogin(LocalDateTime.now());
-                tokenRepository.save(token);
-                userRepository.save(user);
-                return token;
+                User userSaved = userRepository.save(user);
+                Token token = Token.createToken(userSaved);
+                Token tokenSaved = tokenRepository.save(token);
+                userSaved.setToken(tokenSaved);
+                userRepository.save(userSaved);
+                return tokenSaved;
+
             }
         }else {
             throw new CustomExceptions("User not valid");
         }
+    }
+
+    public void updateUser(Long id, User user) {
+        User userLocl = userRepository.findById(id).orElse(null);
+       if (userLocl != null) {
+                userRepository.save(user);
+       }else {
+              throw new IllegalStateException("User not found");
+       }
+    }
+
+    public User getBestUsers() {
+        return userRepository.findTopByOrderByPuntuacionDesc();
     }
 }

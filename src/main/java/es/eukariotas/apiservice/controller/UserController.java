@@ -6,6 +6,9 @@ import es.eukariotas.apiservice.persistence.entity.User;
 import es.eukariotas.apiservice.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,92 +19,82 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
-public class UserController{
+public class UserController {
 
     private final UserService userService;
     @Autowired
     private HttpServletRequest request;
+
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
+
     @GetMapping
-    public List<User> getUsers() {
+    public List<User> getUsersList() {
         return userService.getAllUsers();
     }
-
-    /**
-     * Loguea un usuario
-     * @param user nombre de usuario
-     * @param password contraseña
-     * @return 200 si se ha logueado correctamente, 400 si no se ha podido loguear
-     */
-    @GetMapping("/login/{userName}/{password}")
-    public User login(@PathVariable(value = "userName") String user, @PathVariable("password") String password){
+    @GetMapping("/page")
+    public ResponseEntity<Page<User>> getUsers(@RequestParam(name = "pNum") int page, @RequestParam(name = "pSize") int size, @RequestParam(name = "sort") String sort) {
+        //TODO: implementar paginacion y ordenacion ORDER BY
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        HttpHeaders headers = new HttpHeaders();
+        Page<User> userPage = null;
         try {
-          return userService.login(user, password);
-        } catch (CustomExceptions e) {
+            userPage = userService.getAllUsers(PageRequest.of(page, size, Sort.by(sort).descending()));
+            status = HttpStatus.OK;
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        return new ResponseEntity<>(userPage, headers, status);
     }
 
-    @GetMapping("/verify/{userName}/{password}")
-    public ResponseEntity<String> verify(@PathVariable(value = "userName") String user, @PathVariable("password") String password){
-        System.out.printf("cocaina");
-            if (userService.verifyUser(user, password)) {
-                return new ResponseEntity<>("cocaina", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
-            }
-    }
-
-    /**
-     * Verifica si el token es correcto o si ha expirado
-     * @return 200 si es correcto, 401 si no es correcto
-     */
-    @GetMapping("/verify")
-    public ResponseEntity<String> verify(){
+    @PostMapping("/register")
+    public ResponseEntity<Token> registerUser(@RequestBody User user) {
+        Token token = null;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        HttpHeaders headers = new HttpHeaders();
         try {
-            String token = request.getHeader("token");
-            String userName = request.getHeader("userName");
-            if (userService.verifyTokenByUser(userName, token)) {
-                return new ResponseEntity<>("", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
-            }
+            token = userService.registerUser(user);
+            status = HttpStatus.OK;
         } catch (CustomExceptions e) {
-            throw new RuntimeException(e);
+            status = HttpStatus.BAD_REQUEST;
+            //TODO controlar excepciones
         }
+        return new ResponseEntity<>(token, headers, status);
     }
 
-    @GetMapping("/logout")
-    public ResponseEntity<String> logout(){
+
+    @PutMapping("/edit")
+    public ResponseEntity<String> editUser(@RequestBody User user) {
+        String body ="";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        HttpHeaders headers = new HttpHeaders();
         try {
-            String token = request.getHeader("token");
-            String userName = request.getHeader("userName");
-            if (userService.verifyTokenByUser(userName, token)) {
-                userService.logout(userName, token);
-                return new ResponseEntity<>("", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
-            }
-        } catch (CustomExceptions e) {
-            throw new RuntimeException(e);
+            userService.updateUser(user.getId(),user);
+            body = "usuario editado";
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            body = "error al editar -"+e.getMessage();
         }
+        return new ResponseEntity<>(body, headers, status);
     }
-
-    @GetMapping("/register")
-    public ResponseEntity<String> register(@RequestBody String userName, @RequestParam("password") String password, @RequestParam("email") String email){
-        User newUser = new User();
-        newUser.setUserName(userName);
-        newUser.setPassword(password);
-        newUser.setUserEmail(email);
-
+    //TODO: falta implementar el metodo
+    @GetMapping("/best")
+    public ResponseEntity<User> getBestUsers() {
+        User users = null;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        HttpHeaders headers = new HttpHeaders();
         try {
-            userService.registerUser(newUser);
-            return new ResponseEntity<>("", HttpStatus.OK);
-        } catch (CustomExceptions e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            users = userService.getBestUsers();
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            status = HttpStatus.BAD_REQUEST;
+            //TODO controlar excepciones
         }
+        return new ResponseEntity<>(users, headers, status);
     }
+
+
+
 }

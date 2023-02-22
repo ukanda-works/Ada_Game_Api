@@ -23,20 +23,20 @@ import java.util.Objects;
 @Table(name = "usuario")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "puntucacion", nullable = false)
-    private int puntucacion;
+    @Column(name = "puntuacion", nullable = false)
+    private int puntuacion;
 
-    @Column(name = "userName",nullable = false, unique = true, length = 45)
+    @Column(name = "USERNAME",nullable = false, unique = true, length = 45)
     private String userName;
 
     @Column(name = "email", nullable = false, unique = true, length = 45)
     private String userEmail;
 
-    @Column(name = "password",nullable = false, unique = true, length = 45)
+    @Column(name = "password",nullable = false, length = 45)
     private String password;
 
     @Column(name = "description", length = 240)
@@ -45,7 +45,7 @@ public class User {
     @Column(name = "country", length = 45)
     private String userCountry;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Party> parties = new ArrayList<>();
 
@@ -61,11 +61,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(userName, user.userName) && Objects.equals(userEmail, user.userEmail) && Objects.equals(password, user.password);
+        return Objects.equals(id, user.id) && Objects.equals(userName, user.userName) && Objects.equals(userEmail, user.userEmail);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, userEmail, password);
+        return Objects.hash(id, userName, userEmail);
     }
 }
