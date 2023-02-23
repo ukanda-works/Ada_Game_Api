@@ -4,6 +4,8 @@ import es.eukariotas.apiservice.exceptions.CustomExceptions;
 import es.eukariotas.apiservice.persistence.entity.Token;
 import es.eukariotas.apiservice.persistence.entity.User;
 import es.eukariotas.apiservice.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,10 +32,15 @@ public class UserController {
     }
 
 
+    @Operation(summary = "Devuelve una lista con todos los usuarios almacenados")
+    @ApiResponse(responseCode = "200", description = "OK. Devuelve una lista con todos los usuarios almacenados")
     @GetMapping
     public List<User> getUsersList() {
         return userService.getAllUsers();
     }
+
+    @Operation(summary = "Devuelve los usuarios paginados y ordenados según los parámetros pasados")
+    @ApiResponse(responseCode = "200", description = "OK. Devuelve los usuarios paginados y ordenados según los parámetros pasados")
     @GetMapping("/page")
     public ResponseEntity<Page<User>> getUsers(@RequestParam(name = "pNum") int page, @RequestParam(name = "pSize") int size, @RequestParam(name = "sort") String sort) {
         //TODO: implementar paginacion y ordenacion ORDER BY
@@ -49,6 +56,8 @@ public class UserController {
         return new ResponseEntity<>(userPage, headers, status);
     }
 
+    @Operation(summary = "Almacena un nuevo usuario en la base de datos y devuelve un token de autenticación")
+    @ApiResponse(responseCode = "200", description = "OK. Almacena un nuevo usuario en la base de datos y devuelve un token de autenticación")
     @PostMapping("/register")
     public ResponseEntity<Token> registerUser(@RequestBody User user) {
         Token token = null;
@@ -64,7 +73,8 @@ public class UserController {
         return new ResponseEntity<>(token, headers, status);
     }
 
-
+    @Operation(summary = "Modifica los datos de un usuario pasado por body")
+    @ApiResponse(responseCode = "200", description = "OK. Modifica los datos de un usuario pasado por body")
     @PutMapping("/edit")
     public ResponseEntity<String> editUser(@RequestBody User user) {
         String body ="";
@@ -79,7 +89,9 @@ public class UserController {
         }
         return new ResponseEntity<>(body, headers, status);
     }
-    //TODO: falta implementar el metodo
+
+    @Operation(summary = "Devuelve el usuario con mayor puntuación")
+    @ApiResponse(responseCode = "200", description = "OK. Devuelve el usuario con mayor puntuación")
     @GetMapping("/best")
     public ResponseEntity<User> getBestUsers() {
         User users = null;

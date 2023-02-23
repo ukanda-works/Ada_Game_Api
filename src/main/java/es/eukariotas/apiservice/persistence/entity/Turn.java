@@ -35,5 +35,13 @@ public class Turn {
     @Column(name = "movimiento", nullable = false)
     private String movimiento;
 
-
+    @Override
+    public String toString() {
+        return "Turn{" +
+                "id=" + id +
+                ", numTurno=" + numTurno +
+                ", jugador='" + jugador + '\'' +
+                ", movimiento='" + movimiento + '\'' +
+                '}';
+    }
 }

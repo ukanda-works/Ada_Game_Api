@@ -8,7 +8,9 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -27,7 +29,7 @@ public class Token {
     private String token;
 
     @Column(name = "caducity")
-    private LocalDateTime caducity;
+    private Date caducity;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id")
@@ -41,13 +43,13 @@ public class Token {
     public static Token createToken(User user) {
         Token token = new Token();
         token.setToken(UUID.randomUUID().toString());
-        token.setCaducity(LocalDateTime.now().plusDays(7));
+        token.setCaducity(Date.from(Instant.from(LocalDateTime.now().plusDays(7))));
         token.setUser(user);
         return token;
     }
 
     public Boolean isExpired() {
-        return caducity.isBefore(LocalDateTime.now());
+        return caducity.before(Date.from(Instant.now()));
     }
 
 }

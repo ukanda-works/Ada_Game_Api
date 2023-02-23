@@ -12,6 +12,7 @@ import org.hibernate.type.SqlTypes;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -33,7 +34,7 @@ public class Party {
     private String jugador_color;
 
     @Column(name = "date", nullable = false)
-    private LocalDateTime comienzo_partida;
+    private Date comienzo_partida;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,5 +47,18 @@ public class Party {
     public void addTurn(Turn turn) {
         turns.add(turn);
         turn.setParty(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Party{" +
+                "id=" + id +
+                ", resultado='" + resultado + '\'' +
+                ", jugador_color='" + jugador_color + '\'' +
+                ", comienzo_partida=" + comienzo_partida.toString() +
+                ", user=" + user +
+                ", turns=" + turns +
+                '}';
+
     }
 }

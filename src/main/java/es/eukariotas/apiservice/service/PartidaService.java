@@ -5,9 +5,7 @@ import es.eukariotas.apiservice.persistence.entity.User;
 import es.eukariotas.apiservice.persistence.repository.PartidaRepository;
 import es.eukariotas.apiservice.persistence.repository.TurnoRepository;
 import es.eukariotas.apiservice.persistence.repository.UserRepository;
-import jakarta.servlet.http.Part;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -77,4 +75,6 @@ public class PartidaService{
         List<Party> parties = partidaRepository.findAll();
         return parties.stream().filter(party -> party.getUser().getId()==userId && party.getResultado()==party.getJugador_color()).collect(Collectors.toList());
     }
+
+
 }

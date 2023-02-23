@@ -6,12 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -50,7 +48,7 @@ public class User {
     private List<Party> parties = new ArrayList<>();
 
     @Column(name = "last_login")
-    private LocalDateTime lastLogin;
+    private Date lastLogin;
 
     @JsonIgnore
     @OneToOne(mappedBy = "user")
@@ -67,5 +65,14 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, userName, userEmail);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                "userName" + userName +
+                "userEmail" + userEmail +
+                '}';
     }
 }

@@ -9,7 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -101,7 +103,7 @@ public class UserService {
             }
            Token token = Token.createToken(user);
             user.setToken(token);
-            user.setLastLogin(LocalDateTime.now());
+            user.setLastLogin(Date.from(Instant.now()));
            tokenRepository.save(token);
            userRepository.save(user);
             return user;
@@ -177,7 +179,7 @@ public class UserService {
             if (existsByUsername(user)|| userRepository.existsByUserEmail(user.getUserEmail())){
                 throw new CustomExceptions("Username or email already taken");
             } else {
-                user.setLastLogin(LocalDateTime.now());
+                user.setLastLogin(Date.from(Instant.now()));
                 User userSaved = userRepository.save(user);
                 Token token = Token.createToken(userSaved);
                 Token tokenSaved = tokenRepository.save(token);
